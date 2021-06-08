@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { getRandomCoords } from './utils/getRandomCoords';
 import { Snake, Food } from './components';
-import Swipeable from 'swipeable-react';
 import ReactSwipeEvents from 'react-swipe-events';
 
 const initialState = {
