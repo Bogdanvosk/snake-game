@@ -5,3 +5,10 @@
   height: 600px;
   border: 2px solid #ccc;
 }
+
+@media (max-width: 600px) {
+  .game-area {
+    width: 100vw;
+    height: 100vh;
+  }
+}

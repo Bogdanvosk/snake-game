@@ -6,10 +6,10 @@ import ReactSwipeEvents from 'react-swipe-events';
 const initialState = {
   snakeDots: [
     [0, 0],
-    [2, 0]
+    [20, 0]
   ],
   direction: 'RIGHT',
-  food: getRandomCoords(),
+  food: getRandomCoords(600, 20),
   speed: 200
 };
 
@@ -22,7 +22,7 @@ export default class App extends Component {
   }
 
   componentDidUpdate() {
-    this.checkIfOutOfBorders();
+    // this.checkIfOutOfBorders();
     this.checlIfCollapsed();
     this.checkIfEat();
   }
@@ -61,19 +61,19 @@ export default class App extends Component {
 
     switch (this.state.direction) {
       case 'RIGHT':
-        head = [head[0] + 2, head[1]];
+        head = [head[0] + 20, head[1]];
         break;
 
       case 'LEFT':
-        head = [head[0] - 2, head[1]];
+        head = [head[0] - 20, head[1]];
         break;
 
       case 'UP':
-        head = [head[0], head[1] - 2];
+        head = [head[0], head[1] - 20];
         break;
 
       case 'DOWN':
-        head = [head[0], head[1] + 2];
+        head = [head[0], head[1] + 20];
         break;
 
       default:
@@ -86,13 +86,13 @@ export default class App extends Component {
     });
   };
 
-  checkIfOutOfBorders = () => {
-    let head = this.state.snakeDots[this.state.snakeDots.length - 1];
+  // checkIfOutOfBorders = () => {
+  //   let head = this.state.snakeDots[this.state.snakeDots.length - 1];
 
-    if (head[0] >= 100 || head[1] >= 100 || head[0] < 0 || head[1] < 0) {
-      this.onGameOver();
-    }
-  };
+  //   if (head[0] >= 100 || head[1] >= 100 || head[0] < 0 || head[1] < 0) {
+  //     this.onGameOver();
+  //   }
+  // };
 
   checlIfCollapsed = () => {
     let snake = [...this.state.snakeDots];
