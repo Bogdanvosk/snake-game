@@ -4,6 +4,10 @@
   padding: 0;
 }
 
+body {
+  overflow-y: hidden;
+}
+
 .game-area {
   position: relative;
   margin: 0 auto;
