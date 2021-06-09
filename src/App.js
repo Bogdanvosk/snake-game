@@ -164,7 +164,8 @@ export default class App extends Component {
             direction: 'RIGHT'
           });
         }}
-        onSwipedUp={() => {
+        onSwipedUp={e => {
+          e.preventDefault();
           this.setState({
             direction: 'UP'
           });
