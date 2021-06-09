@@ -3,13 +3,23 @@ import { getRandomCoords } from './utils/getRandomCoords';
 import { Snake, Food } from './components';
 import ReactSwipeEvents from 'react-swipe-events';
 
+const WINDOW_WIDTH = window.screen.width;
+const WINDOW_HEIGHT = window.screen.height;
+
+const SNAKE_PART_WIDTH = 20;
+const SNAKE_PART_HEIGHT = 20;
+
 const initialState = {
+  windowWidth: WINDOW_WIDTH,
+  windowHeight: WINDOW_HEIGHT,
+  snakePartWidth: SNAKE_PART_WIDTH,
+  snakePartHeight: SNAKE_PART_HEIGHT,
   snakeDots: [
     [0, 0],
     [20, 0]
   ],
   direction: 'RIGHT',
-  food: getRandomCoords(600, 20),
+  food: getRandomCoords(WINDOW_WIDTH, SNAKE_PART_WIDTH),
   speed: 200
 };
 
@@ -22,8 +32,7 @@ export default class App extends Component {
   }
 
   componentDidUpdate() {
-    // this.checkIfOutOfBorders();
-    this.checlIfCollapsed();
+    this.checkIfCollapsed();
     this.checkIfEat();
   }
 
@@ -61,19 +70,31 @@ export default class App extends Component {
 
     switch (this.state.direction) {
       case 'RIGHT':
-        head = [head[0] + 20, head[1]];
+        head =
+          head[0] >= this.state.windowWidth
+            ? [0, head[1]]
+            : [head[0] + this.state.snakePartWidth, head[1]];
         break;
 
       case 'LEFT':
-        head = [head[0] - 20, head[1]];
+        head =
+          head[0] <= 0
+            ? [this.state.windowWidth, head[1]]
+            : [head[0] - this.state.snakePartWidth, head[1]];
         break;
 
       case 'UP':
-        head = [head[0], head[1] - 20];
+        head =
+          head[1] <= 0
+            ? [head[0], this.state.windowHeight]
+            : [head[0], head[1] - this.state.snakePartHeight];
         break;
 
       case 'DOWN':
-        head = [head[0], head[1] + 20];
+        head =
+          head[1] >= this.state.windowHeight
+            ? [head[0], 0]
+            : [head[0], head[1] + this.state.snakePartHeight];
         break;
 
       default:
@@ -86,21 +107,19 @@ export default class App extends Component {
     });
   };
 
-  // checkIfOutOfBorders = () => {
-  //   let head = this.state.snakeDots[this.state.snakeDots.length - 1];
-
-  //   if (head[0] >= 100 || head[1] >= 100 || head[0] < 0 || head[1] < 0) {
-  //     this.onGameOver();
-  //   }
-  // };
-
-  checlIfCollapsed = () => {
+  checkIfCollapsed = () => {
     let snake = [...this.state.snakeDots];
     let head = snake[snake.length - 1];
     snake.pop();
 
     snake.forEach(dot => {
       if (head[0] === dot[0] && head[1] === dot[1]) {
+        this.onGameOver();
+      } else if (
+        head[0] >= this.state.windowWidth ||
+        head[1] >= this.state.windowHeight
+      ) {
+        console.log('Преграда!');
         this.onGameOver();
       }
     });
@@ -111,8 +130,9 @@ export default class App extends Component {
     let food = this.state.food;
 
     if (head[0] === food[0] && head[1] === food[1]) {
+      console.log('Съел');
       this.setState({
-        food: getRandomCoords()
+        food: getRandomCoords(WINDOW_WIDTH, SNAKE_PART_WIDTH)
       });
       this.enlargeSnake();
     }
