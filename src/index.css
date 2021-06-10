@@ -26,13 +26,6 @@ body {
   flex-basis: 75%;
 }
 
-@media (max-width: 600px) {
-  .game-area {
-    /* width: 100vw; */
-    /* height: 69vh; */
-  }
-}
-
 .controller-container {
   flex-basis: 25%;
   width: 100%;

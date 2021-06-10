@@ -1,5 +1,4 @@
 import React from 'react';
-import SnakeIcon from './snake-icon.svg';
 import styles from './Snake.module.css';
 
 const Snake = ({ snakeDots }) => {

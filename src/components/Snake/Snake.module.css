@@ -5,3 +5,8 @@
   background-color: lightblue;
   z-index: 2;
 }
+
+.snakeImg {
+  width: 40px;
+  position: absolute;
+}
