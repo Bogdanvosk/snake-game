@@ -23,7 +23,7 @@ body {
   position: relative;
   width: 100%;
   border: 5px solid black;
-  flex: 1 1 auto;
+  flex-basis: 75%;
 }
 
 @media (max-width: 600px) {
@@ -34,7 +34,7 @@ body {
 }
 
 .controller-container {
-  flex: 0;
+  flex-basis: 25%;
   width: 100%;
   background-color: #ccc;
   display: grid;
@@ -50,7 +50,8 @@ body {
   width: 40px;
 }
 
-.controller-container div {
+.controller-container button {
+  padding: 5px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -5,14 +5,10 @@ import { Snake, Food } from './components';
 import ArrowIcon from './right-arrow.svg';
 
 export default class App extends Component {
-  SNAKE_PART_WIDTH = 20;
-  SNAKE_PART_HEIGHT = 20;
-
   state = {
     width: null,
     height: null,
-    snakePartWidth: this.SNAKE_PART_WIDTH,
-    snakePartHeight: this.SNAKE_PART_HEIGHT,
+    snakeSize: 20,
     snakeDots: [
       [0, 0],
       [20, 0]
@@ -29,7 +25,16 @@ export default class App extends Component {
     this.setState({
       width,
       height,
-      food: getRandomCoords(width, this.SNAKE_PART_WIDTH)
+      food: [
+        Math.floor(
+          Math.random() *
+            ((width - this.state.snakeSize) / this.state.snakeSize + 1)
+        ) * this.state.snakeSize,
+        Math.floor(
+          Math.random() *
+            ((height - this.state.snakeSize) / this.state.snakeSize + 1)
+        ) * this.state.snakeSize
+      ]
     });
 
     setInterval(this.moveSnake, this.state.speed);
@@ -44,25 +49,37 @@ export default class App extends Component {
     this.checkIfEat();
   }
 
+  isAppleOnSnake = () => {
+    let snake = [...this.state.snakeDots];
+    for (let i = 0; i < snake.length; i++) {
+      if (
+        this.state.food[0] === snake[i][0] &&
+        this.state.food[1] === snake[i][1]
+      )
+        return true;
+    }
+    return false;
+  };
+
   moveSnake = () => {
     let dots = [...this.state.snakeDots];
     let head = dots[dots.length - 1];
 
     switch (this.state.direction) {
       case 'RIGHT':
-        head = [head[0] + this.state.snakePartWidth, head[1]];
+        head = [head[0] + this.state.snakeSize, head[1]];
         break;
 
       case 'LEFT':
-        head = head = [head[0] - this.state.snakePartWidth, head[1]];
+        head = head = [head[0] - this.state.snakeSize, head[1]];
         break;
 
       case 'UP':
-        head = head = [head[0], head[1] - this.state.snakePartWidth];
+        head = head = [head[0], head[1] - this.state.snakeSize];
         break;
 
       case 'DOWN':
-        head = head = [head[0], head[1] + this.state.snakePartWidth];
+        head = head = [head[0], head[1] + this.state.snakeSize];
         break;
 
       default:
@@ -85,7 +102,6 @@ export default class App extends Component {
         this.onGameOver();
       }
     });
-    console.log(this.state.width, this.state.height);
     if (
       head[0] >= this.state.width ||
       head[0] < 0 ||
@@ -103,7 +119,11 @@ export default class App extends Component {
     if (head[0] === food[0] && head[1] === food[1]) {
       console.log('Съел');
       this.setState({
-        food: getRandomCoords(this.state.width, this.SNAKE_PART_WIDTH)
+        food: getRandomCoords(
+          this.state.width,
+          this.state.height,
+          this.state.snakeSize
+        )
       });
       this.enlargeSnake();
     }
@@ -125,7 +145,11 @@ export default class App extends Component {
         [20, 0]
       ],
       direction: 'RIGHT',
-      food: getRandomCoords(this.state.width, this.SNAKE_PART_WIDTH)
+      food: getRandomCoords(
+        this.state.width,
+        this.state.height,
+        this.state.snakeSize
+      )
     });
   };
 
