@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
-import { getRandomCoords } from './utils/getRandomCoords';
 import { Snake, Food } from './components';
 // import { calcSnakeLength } from './utils/calcSnakeLength';
 import ArrowIcon from './right-arrow.svg';
 
 export default class App extends Component {
-  state = {
-    width: null,
-    height: null,
-    snakeSize: 20,
-    snakeDots: [
-      [0, 0],
-      [20, 0]
-    ],
-    direction: 'RIGHT',
-    food: [0, 0],
-    speed: 200,
-    timeoutId: 0
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      width: null,
+      height: null,
+      snakeSize: 20,
+      snakeDots: [
+        [0, 0],
+        [20, 0]
+      ],
+      direction: 'RIGHT',
+      food: [0, 0],
+      speed: 200,
+      timeoutId: 0
+    };
+  }
 
   componentDidMount() {
     const width = document.querySelector('.game-area').clientWidth;
@@ -25,16 +27,7 @@ export default class App extends Component {
     this.setState({
       width,
       height,
-      food: [
-        Math.floor(
-          Math.random() *
-            ((width - this.state.snakeSize) / this.state.snakeSize + 1)
-        ) * this.state.snakeSize,
-        Math.floor(
-          Math.random() *
-            ((height - this.state.snakeSize) / this.state.snakeSize + 1)
-        ) * this.state.snakeSize
-      ]
+      food: this.getRandomCoords(width, height)
     });
 
     setInterval(this.moveSnake, this.state.speed);
@@ -49,16 +42,17 @@ export default class App extends Component {
     this.checkIfEat();
   }
 
-  isAppleOnSnake = () => {
-    let snake = [...this.state.snakeDots];
-    for (let i = 0; i < snake.length; i++) {
-      if (
-        this.state.food[0] === snake[i][0] &&
-        this.state.food[1] === snake[i][1]
-      )
-        return true;
-    }
-    return false;
+  getRandomCoords = (width, height) => {
+    return [
+      Math.floor(
+        Math.random() *
+          ((width - this.state.snakeSize) / this.state.snakeSize + 1)
+      ) * this.state.snakeSize,
+      Math.floor(
+        Math.random() *
+          ((height - this.state.snakeSize) / this.state.snakeSize + 1)
+      ) * this.state.snakeSize
+    ];
   };
 
   moveSnake = () => {
@@ -117,13 +111,8 @@ export default class App extends Component {
     let food = this.state.food;
 
     if (head[0] === food[0] && head[1] === food[1]) {
-      console.log('Съел');
       this.setState({
-        food: getRandomCoords(
-          this.state.width,
-          this.state.height,
-          this.state.snakeSize
-        )
+        food: this.getRandomCoords(this.state.width, this.state.height)
       });
       this.enlargeSnake();
     }
@@ -145,11 +134,7 @@ export default class App extends Component {
         [20, 0]
       ],
       direction: 'RIGHT',
-      food: getRandomCoords(
-        this.state.width,
-        this.state.height,
-        this.state.snakeSize
-      )
+      food: this.getRandomCoords(this.state.width, this.state.height)
     });
   };
 
