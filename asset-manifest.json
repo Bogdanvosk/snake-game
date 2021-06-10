@@ -1,22 +1,24 @@
 {
   "files": {
-    "main.css": "/snake-game/static/css/main.0a7ce9ec.chunk.css",
-    "main.js": "/snake-game/static/js/main.34a878dd.chunk.js",
-    "main.js.map": "/snake-game/static/js/main.34a878dd.chunk.js.map",
-    "runtime-main.js": "/snake-game/static/js/runtime-main.f05a61ec.js",
-    "runtime-main.js.map": "/snake-game/static/js/runtime-main.f05a61ec.js.map",
-    "static/js/2.e75b0681.chunk.js": "/snake-game/static/js/2.e75b0681.chunk.js",
-    "static/js/2.e75b0681.chunk.js.map": "/snake-game/static/js/2.e75b0681.chunk.js.map",
-    "static/js/3.db79ab6a.chunk.js": "/snake-game/static/js/3.db79ab6a.chunk.js",
-    "static/js/3.db79ab6a.chunk.js.map": "/snake-game/static/js/3.db79ab6a.chunk.js.map",
+    "main.css": "/snake-game/static/css/main.2f1dae84.chunk.css",
+    "main.js": "/snake-game/static/js/main.616fbb20.chunk.js",
+    "main.js.map": "/snake-game/static/js/main.616fbb20.chunk.js.map",
+    "runtime-main.js": "/snake-game/static/js/runtime-main.bc11741e.js",
+    "runtime-main.js.map": "/snake-game/static/js/runtime-main.bc11741e.js.map",
+    "static/js/2.ddb18225.chunk.js": "/snake-game/static/js/2.ddb18225.chunk.js",
+    "static/js/2.ddb18225.chunk.js.map": "/snake-game/static/js/2.ddb18225.chunk.js.map",
+    "static/js/3.655f59bc.chunk.js": "/snake-game/static/js/3.655f59bc.chunk.js",
+    "static/js/3.655f59bc.chunk.js.map": "/snake-game/static/js/3.655f59bc.chunk.js.map",
     "index.html": "/snake-game/index.html",
-    "static/css/main.0a7ce9ec.chunk.css.map": "/snake-game/static/css/main.0a7ce9ec.chunk.css.map",
-    "static/js/2.e75b0681.chunk.js.LICENSE.txt": "/snake-game/static/js/2.e75b0681.chunk.js.LICENSE.txt"
+    "static/css/main.2f1dae84.chunk.css.map": "/snake-game/static/css/main.2f1dae84.chunk.css.map",
+    "static/js/2.ddb18225.chunk.js.LICENSE.txt": "/snake-game/static/js/2.ddb18225.chunk.js.LICENSE.txt",
+    "static/media/apple.1a67822e.svg": "/snake-game/static/media/apple.1a67822e.svg",
+    "static/media/right-arrow.1260e6bc.svg": "/snake-game/static/media/right-arrow.1260e6bc.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.f05a61ec.js",
-    "static/js/2.e75b0681.chunk.js",
-    "static/css/main.0a7ce9ec.chunk.css",
-    "static/js/main.34a878dd.chunk.js"
+    "static/js/runtime-main.bc11741e.js",
+    "static/js/2.ddb18225.chunk.js",
+    "static/css/main.2f1dae84.chunk.css",
+    "static/js/main.616fbb20.chunk.js"
   ]
 }
