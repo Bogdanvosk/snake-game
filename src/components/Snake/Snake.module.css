@@ -2,7 +2,6 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  background-color: #000;
-  border: 1px solid #fff;
+  background-color: lightblue;
   z-index: 2;
 }

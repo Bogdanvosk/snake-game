@@ -1,34 +1,42 @@
 import React, { Component } from 'react';
 import { getRandomCoords } from './utils/getRandomCoords';
 import { Snake, Food } from './components';
-import ReactSwipeEvents from 'react-swipe-events';
-
-const WINDOW_WIDTH = window.screen.width;
-const WINDOW_HEIGHT = window.screen.height;
-
-const SNAKE_PART_WIDTH = 20;
-const SNAKE_PART_HEIGHT = 20;
-
-const initialState = {
-  windowWidth: WINDOW_WIDTH,
-  windowHeight: WINDOW_HEIGHT,
-  snakePartWidth: SNAKE_PART_WIDTH,
-  snakePartHeight: SNAKE_PART_HEIGHT,
-  snakeDots: [
-    [0, 0],
-    [20, 0]
-  ],
-  direction: 'RIGHT',
-  food: getRandomCoords(WINDOW_WIDTH, SNAKE_PART_WIDTH),
-  speed: 200
-};
+// import { calcSnakeLength } from './utils/calcSnakeLength';
+import ArrowIcon from './right-arrow.svg';
 
 export default class App extends Component {
-  state = initialState;
+  SNAKE_PART_WIDTH = 20;
+  SNAKE_PART_HEIGHT = 20;
+
+  state = {
+    width: null,
+    height: null,
+    snakePartWidth: this.SNAKE_PART_WIDTH,
+    snakePartHeight: this.SNAKE_PART_HEIGHT,
+    snakeDots: [
+      [0, 0],
+      [20, 0]
+    ],
+    direction: 'RIGHT',
+    food: [0, 0],
+    speed: 200,
+    timeoutId: 0
+  };
 
   componentDidMount() {
+    const width = document.querySelector('.game-area').clientWidth;
+    const height = document.querySelector('.game-area').clientHeight;
+    this.setState({
+      width,
+      height,
+      food: getRandomCoords(width, this.SNAKE_PART_WIDTH)
+    });
+
     setInterval(this.moveSnake, this.state.speed);
-    document.onkeydown = this.onKeyDown;
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.state.timeoutId);
   }
 
   componentDidUpdate() {
@@ -36,65 +44,25 @@ export default class App extends Component {
     this.checkIfEat();
   }
 
-  onKeyDown = e => {
-    // e = e || window.event
-    switch (e.keyCode) {
-      case 38:
-        this.setState({
-          direction: 'UP'
-        });
-        break;
-      case 40:
-        this.setState({
-          direction: 'DOWN'
-        });
-        break;
-      case 37:
-        this.setState({
-          direction: 'LEFT'
-        });
-        break;
-      case 39:
-        this.setState({
-          direction: 'RIGHT'
-        });
-        break;
-      default:
-        break;
-    }
-  };
-
   moveSnake = () => {
     let dots = [...this.state.snakeDots];
     let head = dots[dots.length - 1];
 
     switch (this.state.direction) {
       case 'RIGHT':
-        head =
-          head[0] >= this.state.windowWidth
-            ? [0, head[1]]
-            : [head[0] + this.state.snakePartWidth, head[1]];
+        head = [head[0] + this.state.snakePartWidth, head[1]];
         break;
 
       case 'LEFT':
-        head =
-          head[0] <= 0
-            ? [this.state.windowWidth, head[1]]
-            : [head[0] - this.state.snakePartWidth, head[1]];
+        head = head = [head[0] - this.state.snakePartWidth, head[1]];
         break;
 
       case 'UP':
-        head =
-          head[1] <= 0
-            ? [head[0], this.state.windowHeight]
-            : [head[0], head[1] - this.state.snakePartHeight];
+        head = head = [head[0], head[1] - this.state.snakePartWidth];
         break;
 
       case 'DOWN':
-        head =
-          head[1] >= this.state.windowHeight
-            ? [head[0], 0]
-            : [head[0], head[1] + this.state.snakePartHeight];
+        head = head = [head[0], head[1] + this.state.snakePartWidth];
         break;
 
       default:
@@ -115,14 +83,17 @@ export default class App extends Component {
     snake.forEach(dot => {
       if (head[0] === dot[0] && head[1] === dot[1]) {
         this.onGameOver();
-      } else if (
-        head[0] >= this.state.windowWidth ||
-        head[1] >= this.state.windowHeight
-      ) {
-        console.log('Преграда!');
-        this.onGameOver();
       }
     });
+    console.log(this.state.width, this.state.height);
+    if (
+      head[0] >= this.state.width ||
+      head[0] < 0 ||
+      head[1] >= this.state.height ||
+      head[1] < 0
+    ) {
+      this.onGameOver();
+    }
   };
 
   checkIfEat = () => {
@@ -132,7 +103,7 @@ export default class App extends Component {
     if (head[0] === food[0] && head[1] === food[1]) {
       console.log('Съел');
       this.setState({
-        food: getRandomCoords(WINDOW_WIDTH, SNAKE_PART_WIDTH)
+        food: getRandomCoords(this.state.width, this.SNAKE_PART_WIDTH)
       });
       this.enlargeSnake();
     }
@@ -148,38 +119,62 @@ export default class App extends Component {
 
   onGameOver = () => {
     alert(`Game over. Snake length is ${this.state.snakeDots.length}`);
-    this.setState(initialState);
+    this.setState({
+      snakeDots: [
+        [0, 0],
+        [20, 0]
+      ],
+      direction: 'RIGHT',
+      food: getRandomCoords(this.state.width, this.SNAKE_PART_WIDTH)
+    });
   };
 
   render() {
     return (
-      <ReactSwipeEvents
-        onSwipedLeft={() => {
-          this.setState({
-            direction: 'LEFT'
-          });
-        }}
-        onSwipedRight={() => {
-          this.setState({
-            direction: 'RIGHT'
-          });
-        }}
-        onSwipedUp={e => {
-          e.preventDefault();
-          this.setState({
-            direction: 'UP'
-          });
-        }}
-        onSwipedDown={() => {
-          this.setState({
-            direction: 'DOWN'
-          });
-        }}>
-        <div className='game-area'>
+      <div className='wrapper'>
+        <div className='game-area' id='game-area'>
           <Snake snakeDots={this.state.snakeDots} />
           <Food dot={this.state.food} />
         </div>
-      </ReactSwipeEvents>
+        <div className='controller-container'>
+          <button
+            className='up'
+            onClick={() => {
+              this.setState({
+                direction: 'UP'
+              });
+            }}>
+            <img src={ArrowIcon} alt='' />
+          </button>
+          <button
+            className='right'
+            onClick={() => {
+              this.setState({
+                direction: 'RIGHT'
+              });
+            }}>
+            <img src={ArrowIcon} alt='' />
+          </button>
+          <button
+            className='left'
+            onClick={() => {
+              this.setState({
+                direction: 'LEFT'
+              });
+            }}>
+            <img src={ArrowIcon} alt='' />
+          </button>
+          <button
+            className='down'
+            onClick={() => {
+              this.setState({
+                direction: 'DOWN'
+              });
+            }}>
+            <img src={ArrowIcon} alt='' />
+          </button>
+        </div>
+      </div>
     );
   }
 }
