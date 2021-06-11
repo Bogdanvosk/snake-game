@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Snake, Food } from './components';
+import { Snake, Food, Bomb } from './components';
 // import { calcSnakeLength } from './utils/calcSnakeLength';
 import ArrowIcon from './right-arrow.svg';
 
@@ -17,7 +17,8 @@ export default class App extends Component {
       direction: 'RIGHT',
       food: [0, 0],
       speed: 200,
-      timeoutId: 0
+      timeoutId: 0,
+      bomb: []
     };
   }
 
@@ -27,10 +28,12 @@ export default class App extends Component {
     this.setState({
       width,
       height,
-      food: this.getRandomCoords(width, height)
+      food: this.getRandomCoords(width, height),
+      bomb: this.getRandomCoords(width, height)
     });
 
     setInterval(this.moveSnake, this.state.speed);
+    setInterval(this.changeBombPosition, 5000);
   }
 
   componentWillUnmount() {
@@ -39,8 +42,23 @@ export default class App extends Component {
 
   componentDidUpdate() {
     this.checkIfCollapsed();
-    this.checkIfEat();
+    this.checkIfEatFood();
+    this.checkIfEatBomb();
   }
+
+  changeBombPosition = () => {
+    if (
+      this.state.bomb[0] === this.state.food[0] &&
+      this.state.bomb[1] === this.state.food[1]
+    ) {
+      this.setState({
+        bomb: this.getRandomCoords(this.state.width, this.state.height)
+      });
+    }
+    this.setState({
+      bomb: this.getRandomCoords(this.state.width, this.state.height)
+    });
+  };
 
   getRandomCoords = (width, height) => {
     return [
@@ -106,7 +124,7 @@ export default class App extends Component {
     }
   };
 
-  checkIfEat = () => {
+  checkIfEatFood = () => {
     let head = this.state.snakeDots[this.state.snakeDots.length - 1];
     let food = this.state.food;
 
@@ -115,6 +133,15 @@ export default class App extends Component {
         food: this.getRandomCoords(this.state.width, this.state.height)
       });
       this.enlargeSnake();
+    }
+  };
+
+  checkIfEatBomb = () => {
+    let head = this.state.snakeDots[this.state.snakeDots.length - 1];
+    let bomb = this.state.bomb;
+
+    if (head[0] === bomb[0] && head[1] === bomb[1]) {
+      this.onGameOver();
     }
   };
 
@@ -134,7 +161,8 @@ export default class App extends Component {
         [20, 0]
       ],
       direction: 'RIGHT',
-      food: this.getRandomCoords(this.state.width, this.state.height)
+      food: this.getRandomCoords(this.state.width, this.state.height),
+      bomb: this.getRandomCoords(this.state.width, this.state.height)
     });
   };
 
@@ -144,6 +172,7 @@ export default class App extends Component {
         <div className='game-area' id='game-area'>
           <Snake snakeDots={this.state.snakeDots} />
           <Food dot={this.state.food} />
+          <Bomb dot={this.state.bomb} />
         </div>
         <div className='controller-container'>
           <button
