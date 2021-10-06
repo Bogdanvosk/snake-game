@@ -18,7 +18,8 @@ export default class App extends Component {
       food: [0, 0],
       speed: 200,
       timeoutId: 0,
-      bomb: []
+      bomb: [],
+      timeoutChangeBombPosition: 5000
     };
   }
 
@@ -33,7 +34,7 @@ export default class App extends Component {
     });
 
     setInterval(this.moveSnake, this.state.speed);
-    setInterval(this.changeBombPosition, 5000);
+    setInterval(this.changeBombPosition, this.state.timeoutChangeBombPosition);
   }
 
   componentWillUnmount() {
